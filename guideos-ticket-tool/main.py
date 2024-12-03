@@ -172,6 +172,15 @@ def open_bug_page():
         "https://bugs.guideos.de/projects/guideos/issues?set_filter=1&tracker_id=1"
     )
 
+def del_betreff(event):
+    if betreff_entry.get() == "Gibt einen Titel ein:":
+        betreff_entry.delete(0, tk.END)
+
+def del_beschreibung_text(event):
+    if beschreibung_text.get("1.0", tk.END).strip() == "Schreibe einen Text:":
+        beschreibung_text.delete("1.0", tk.END)
+
+
 
 # GUI erstellen
 root = tk.Tk()
@@ -198,6 +207,8 @@ titel_frame.pack(fill="x", pady=5, padx=20)
 betreff_entry = ttk.Entry(titel_frame, width=50)
 betreff_entry.pack(pady=5, fill="x")
 betreff_entry.insert("end", "Gibt einen Titel ein:")
+betreff_entry.bind("<Button-1>", del_betreff)
+
 
 issue_text_frame = ttk.LabelFrame(root, text="Fehlerbeschreibung", padding=20)
 issue_text_frame.pack(fill="x", pady=5, padx=20)
@@ -209,7 +220,7 @@ beschreibung_text = tk.Text(
 beschreibung_text.pack(pady=5, padx=5, fill="x", expand=True)
 
 beschreibung_text.insert("end", "Schreibe einen Text:")
-
+beschreibung_text.bind("<Button-1>", del_beschreibung_text)
 
 opt_frame = ttk.LabelFrame(root, text="Screenshot (optional)", padding=20)
 opt_frame.pack(fill="x", pady=5, padx=20)
