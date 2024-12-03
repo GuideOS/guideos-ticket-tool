@@ -172,14 +172,29 @@ def open_bug_page():
         "https://bugs.guideos.de/projects/guideos/issues?set_filter=1&tracker_id=1"
     )
 
+
 def del_betreff(event):
     if betreff_entry.get() == "Gibt einen Titel ein:":
         betreff_entry.delete(0, tk.END)
+
 
 def del_beschreibung_text(event):
     if beschreibung_text.get("1.0", tk.END).strip() == "Schreibe einen Text:":
         beschreibung_text.delete("1.0", tk.END)
 
+
+def show_context_menu(event):
+    # Kontextmenü anzeigen
+    context_menu.post(event.x_root, event.y_root)
+
+
+def paste_text():
+    # Text aus der Zwischenablage einfügen
+    try:
+        clipboard_text = root.clipboard_get()
+        beschreibung_text.insert(tk.INSERT, clipboard_text)
+    except tk.TclError:
+        pass  # Zwischenablage ist leer
 
 
 # GUI erstellen
@@ -221,6 +236,14 @@ beschreibung_text.pack(pady=5, padx=5, fill="x", expand=True)
 
 beschreibung_text.insert("end", "Schreibe einen Text:")
 beschreibung_text.bind("<Button-1>", del_beschreibung_text)
+
+context_menu = tk.Menu(root, tearoff=0)
+
+context_menu.add_command(label="Einfügen", command=paste_text)
+
+# Kontextmenü bei Rechtsklick binden
+beschreibung_text.bind("<Button-3>", show_context_menu)
+
 
 opt_frame = ttk.LabelFrame(root, text="Screenshot (optional)", padding=20)
 opt_frame.pack(fill="x", pady=5, padx=20)
