@@ -1,3 +1,9 @@
+guideos-ticket-tool (0.0.3) unstable; urgency=medium
+
+  * Fixed: Send error wenn example text given.
+
+ -- Actionschnitzel <actionschnitzel@guideos.de>  Sun, 08 Dec 2024 17:15:00 +0000
+
 guideos-ticket-tool (0.0.2) unstable; urgency=medium
 
   * Initial release.

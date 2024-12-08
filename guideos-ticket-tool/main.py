@@ -28,12 +28,18 @@ def ticket_erstellen():
     beschreibung = beschreibung_text.get("1.0", tk.END)
     screenshot_path = screenshot_entry.get()
 
-    if not betreff.strip() or not beschreibung.strip():
+
+    if betreff.strip() == "Gibt einen Titel ein:" or beschreibung.strip() == "Schreibe einen Text:":
         messagebox.showerror(
             "Fehler", "Betreff und Beschreibung dürfen nicht leer sein."
         )
         return
-
+        
+    elif not betreff.strip() or not beschreibung.strip():
+        messagebox.showerror(
+            "Fehler", "Betreff und Beschreibung dürfen nicht leer sein."
+        )
+        return
     # inxi-Informationen zur Beschreibung hinzufügen
     system_info = get_inxi_info()
     full_description = f"{beschreibung}\n\nSysteminformationen:\n{system_info}"
