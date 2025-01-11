@@ -7,6 +7,7 @@ import subprocess  # Dieses Modul importieren
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import webbrowser
+from gttk import theme_name
 
 
 # API-Token aus der Umgebungsvariable laden
@@ -220,9 +221,10 @@ root.tk.call(
 )  # replace with {application_path} in final.
 
 # Then set the theme you want with the set_theme procedure
-# root.tk.call("set_theme", "light")
-# or
-root.tk.call("set_theme", "light")
+if "dark" in theme_name or "Dark" in theme_name:
+    root.tk.call("set_theme", "dark")
+else:
+    root.tk.call("set_theme", "light")
 
 
 titel_frame = ttk.LabelFrame(root, text="Betreff", padding=20)
