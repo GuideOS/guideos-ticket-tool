@@ -158,10 +158,13 @@ def get_inxi_info():
 def show_popup(title, message):
     messagebox.showinfo(title, message)
 
+def create_screenshot():
+    # Screenshot erstellen
+    subprocess.run(["gnome-screenshot", "--interactive"])
 
 # Funktion zur Auswahl einer Screenshot-Datei
 def screenshot_waehlen():
-    file_path = filedialog.askopenfilename(
+    file_path = filedialog.askopenfilename(initialdir=home,
         title="Wähle einen Screenshot aus",
         filetypes=[
             ("Alle Dateien", "*.*"),
@@ -254,12 +257,19 @@ beschreibung_text.bind("<Button-3>", show_context_menu)
 opt_frame = ttk.LabelFrame(root, text="Screenshot (optional)", padding=20)
 opt_frame.pack(fill="x", pady=5, padx=20)
 
+opt_frame.columnconfigure(0, weight=1)
+
+take_screenshot = ttk.Button(
+    opt_frame, text="Mach' einen Screenshot", command=create_screenshot
+)
+take_screenshot.grid(row=0, column=0,columnspan=3, padx=5,pady=10,sticky="ew")
+
 screenshot_entry = ttk.Entry(opt_frame)
-screenshot_entry.pack(fill="x", expand=True, side=tk.LEFT, padx=5)
+screenshot_entry.grid(row=1, column=0,columnspan=2,padx=5, sticky="ew")
 screenshot_button = ttk.Button(
     opt_frame, text="Durchsuchen", command=screenshot_waehlen
 )
-screenshot_button.pack(side=tk.LEFT)
+screenshot_button.grid(row=1, column=2, padx=5,sticky="e")
 
 submit_button = ttk.Button(
     root, text="Ticket erstellen", command=ticket_erstellen, style="Accent.TButton"
