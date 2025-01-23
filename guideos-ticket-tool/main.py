@@ -8,10 +8,11 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import webbrowser
 from gttk import theme_name
+from azure_ttk import TCL_THEME_FILE_PATH
 
 
 # API-Token aus der Umgebungsvariable laden
-api_token = "dc3118662aa7093f98f482d861f9afe8245ca5ee"
+api_token = api_token = "8c0e2e3513312d0e83c7d152eeda149da4125773"
 
 if not api_token:
     raise ValueError(
@@ -19,8 +20,8 @@ if not api_token:
     )
 
 # Redmine-URL und Projekt-Identifier
-redmine_url = "https://bugs.guideos.de"
-project_identifier = "guideos"  # Dein Projekt-Identifier
+redmine_url = "https://bugs.guideos.net"
+project_identifier = "guideos-bugtracking"  # Dein Projekt-Identifier
 
 
 # Funktion zum Senden der Daten an Redmine
@@ -217,7 +218,7 @@ application_path = os.path.dirname(script_dir)
 # Just simply import the azure.tcl file
 root.tk.call(
     "source",
-    os.path.join(f"{application_path}/guideos-ticket-tool/azure-adwaita-ttk/azure.tcl"),
+    TCL_THEME_FILE_PATH,
 )  # replace with {application_path} in final.
 
 # Then set the theme you want with the set_theme procedure
