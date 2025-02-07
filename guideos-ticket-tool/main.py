@@ -9,7 +9,7 @@ from tkinter import ttk, filedialog, messagebox
 import webbrowser
 from gttk import theme_name
 from azure_ttk import TCL_THEME_FILE_PATH
-
+from tkfilebrowser import askopendirname, askopenfilenames, asksaveasfilename
 
 # API-Token aus der Umgebungsvariable laden
 api_token = api_token = "8c0e2e3513312d0e83c7d152eeda149da4125773"
@@ -165,8 +165,9 @@ def create_screenshot():
     subprocess.run(["gnome-screenshot", "--interactive"])
 
 # Funktion zur Auswahl einer Screenshot-Datei
+
 def screenshot_waehlen():
-    file_path = filedialog.askopenfilename(initialdir=home,
+    file_path = askopenfilenames(initialdir='~',
         title="Wähle einen Screenshot aus",
         filetypes=[
             ("Alle Dateien", "*.*"),

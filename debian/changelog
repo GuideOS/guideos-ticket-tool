@@ -1,3 +1,9 @@
+guideos-ticket-tool (0.0.7) unstable; urgency=medium
+
+  * Added: New FileDialog
+
+ -- Actionschnitzel <actionschnitzel@guideos.de>  Fri, 07 Feb 2025 01:13:19 +0100
+
 guideos-ticket-tool (0.0.6-3) unstable; urgency=high
 
   * Fix: Wrong Link to Tracker

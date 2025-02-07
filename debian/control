@@ -8,7 +8,7 @@ Homepage: https://rueegger.me
 
 Package: guideos-ticket-tool
 Architecture: all
-Depends: ${misc:Depends}, python3, python3-tk, guideos-azure-ttk
+Depends: ${misc:Depends}, python3, python3-tk, guideos-azure-ttk, python3-tkfilebrowser
 Description: Bug report tool for Linux Guide OS
  Primo Di Tutto is a system configuration tool inspired by openSUSE's YaST
  but designed with the user-friendliness of Linux Mint in mind.
