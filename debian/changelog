@@ -1,3 +1,9 @@
+guideos-ticket-tool (0.0.8) unstable; urgency=medium
+
+  * Fields will be cleared auf submission
+
+ -- Actionschnitzel <actionschnitzel@guideos.de>  Thu, 20 Feb 2025 01:38:36 +0100
+
 guideos-ticket-tool (0.0.7) unstable; urgency=medium
 
   * Added: New FileDialog

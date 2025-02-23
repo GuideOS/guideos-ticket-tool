@@ -7,8 +7,7 @@ import subprocess  # Dieses Modul importieren
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import webbrowser
-from gttk import theme_name
-from azure_ttk import TCL_THEME_FILE_PATH
+from azure_ttk import *
 from tkfilebrowser import askopendirname, askopenfilenames, asksaveasfilename
 
 # API-Token aus der Umgebungsvariable laden
@@ -80,6 +79,14 @@ def ticket_erstellen():
                     )
 
             show_popup("Erfolg", success_message)
+
+            betreff_entry.delete(0, tk.END)
+            betreff_entry.insert("end", "Gibt einen Titel ein:")
+
+            beschreibung_text.delete("1.0", tk.END)
+            beschreibung_text.insert("end", "Schreibe einen Text:")
+
+            screenshot_entry.delete(0, tk.END)
             return True
         else:
             show_popup(
@@ -167,16 +174,19 @@ def create_screenshot():
 # Funktion zur Auswahl einer Screenshot-Datei
 
 def screenshot_waehlen():
-    file_path = askopenfilenames(initialdir='~',
+    file_paths = askopenfilenames(
+        initialdir='~',
         title="Wähle einen Screenshot aus",
         filetypes=[
             ("Alle Dateien", "*.*"),
             ("Bilddateien", "*.png;*.jpg;*.jpeg;*.gif"),
         ],
     )
-    if file_path:
+    if file_paths:
         screenshot_entry.delete(0, tk.END)
-        screenshot_entry.insert(0, file_path)
+        # Convert tuple to a comma-separated string
+        file_path_str = ', '.join(file_paths)
+        screenshot_entry.insert(0, file_path_str)
 
 
 def open_bug_page():
