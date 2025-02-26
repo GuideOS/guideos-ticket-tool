@@ -1,3 +1,9 @@
+guideos-ticket-tool (0.0.8-1) unstable; urgency=medium
+
+  * Changed: Icon & Menu
+
+ -- Actionschnitzel <actionschnitzel@guideos.de>  Wed, 26 Feb 2025 18:46:34 +0100
+
 guideos-ticket-tool (0.0.8) unstable; urgency=medium
 
   * Fields will be cleared auf submission

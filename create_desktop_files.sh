@@ -15,7 +15,7 @@ Encoding=UTF-8
 Terminal=false
 StartupWMClass=Ticket Tool
 Type=Application
-Categories=System
+Categories=System;GuideOS;
 Icon=guideos-ticket-tool-logo
 Path=/opt/guideos-ticket-tool/
 EOL
