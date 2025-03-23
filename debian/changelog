@@ -1,3 +1,9 @@
+guideos-ticket-tool (0.0.9-1) unstable; urgency=medium
+
+  * Added: Feature function
+
+ -- Actionschnitzel <actionschnitzel@guideos.de>  Sun, 23 Mar 2025 02:35:06 +0100
+
 guideos-ticket-tool (0.0.8-1) unstable; urgency=medium
 
   * Changed: Icon & Menu

@@ -1,47 +1,40 @@
 #!/usr/bin/python3
 
-
 import os
 import requests
-import subprocess  # Dieses Modul importieren
+import subprocess
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import webbrowser
 from azure_ttk import *
 from tkfilebrowser import askopendirname, askopenfilenames, asksaveasfilename
 
-# API-Token aus der Umgebungsvariable laden
-api_token = api_token = "8c0e2e3513312d0e83c7d152eeda149da4125773"
+# API-Token
+api_token = "17d83a8b8e64ab63843068e7609b9a55755035d7"
 
 if not api_token:
-    raise ValueError(
-        "API-Token nicht gefunden. Bitte stelle sicher, dass die Umgebungsvariable REDMINE_API_TOKEN gesetzt ist."
-    )
+    raise ValueError("API-Token nicht gefunden. Bitte stelle sicher, dass der Token gesetzt ist.")
 
 # Redmine-URL und Projekt-Identifier
 redmine_url = "https://bugs.guideos.net"
-project_identifier = "guideos-bugtracking"  # Dein Projekt-Identifier
-
+project_identifier = "guideos"
 
 # Funktion zum Senden der Daten an Redmine
 def ticket_erstellen():
     betreff = betreff_entry.get()
     beschreibung = beschreibung_text.get("1.0", tk.END)
     screenshot_path = screenshot_entry.get()
-
+    ticket_typ = tracker_dropdown.get()
+    tracker_id = 1 if ticket_typ == "Bug" else 2
 
     if betreff.strip() == "Gibt einen Titel ein:" or beschreibung.strip() == "Schreibe einen Text:":
-        messagebox.showerror(
-            "Fehler", "Betreff und Beschreibung dürfen nicht leer sein."
-        )
+        messagebox.showerror("Fehler", "Betreff und Beschreibung dürfen nicht leer sein.")
         return
-        
+
     elif not betreff.strip() or not beschreibung.strip():
-        messagebox.showerror(
-            "Fehler", "Betreff und Beschreibung dürfen nicht leer sein."
-        )
+        messagebox.showerror("Fehler", "Betreff und Beschreibung dürfen nicht leer sein.")
         return
-    # inxi-Informationen zur Beschreibung hinzufügen
+
     system_info = get_inxi_info()
     full_description = f"{beschreibung}\n\nSysteminformationen:\n{system_info}"
 
@@ -51,32 +44,27 @@ def ticket_erstellen():
         "Accept": "application/json",
     }
 
-    # Ticket-Payload
     payload = {
         "issue": {
             "project_id": project_identifier,
             "subject": betreff,
             "description": full_description,
+            "tracker_id": tracker_id
         }
     }
 
     try:
-        response = requests.post(
-            f"{redmine_url}/issues.json", json=payload, headers=headers
-        )
+        response = requests.post(f"{redmine_url}/issues.json", json=payload, headers=headers)
         response.raise_for_status()
 
         if response.status_code == 201:
             ticket_id = response.json().get("issue", {}).get("id", "unbekannt")
             success_message = f"Ticket erfolgreich erstellt. Ticket-ID: {ticket_id}"
 
-            # Wenn eine Datei als Anhang ausgewählt wurde, lade sie hoch
             if screenshot_path:
                 upload_response = upload_attachment(ticket_id, screenshot_path)
                 if upload_response:
-                    success_message += (
-                        f"\nAnhang {screenshot_path} erfolgreich hinzugefügt."
-                    )
+                    success_message += f"\nAnhang {screenshot_path} erfolgreich hinzugefügt."
 
             show_popup("Erfolg", success_message)
 
@@ -89,18 +77,13 @@ def ticket_erstellen():
             screenshot_entry.delete(0, tk.END)
             return True
         else:
-            show_popup(
-                "Fehler",
-                f"Fehler beim Erstellen des Tickets. Statuscode: {response.status_code}",
-            )
+            show_popup("Fehler", f"Fehler beim Erstellen des Tickets. Statuscode: {response.status_code}")
             return False
 
     except requests.exceptions.RequestException as e:
         show_popup("Anfragefehler", f"Fehler bei der API-Anfrage: {e}")
         return False
 
-
-# Funktion zum Hochladen eines Anhangs
 def upload_attachment(ticket_id, file_path):
     try:
         with open(file_path, "rb") as file:
@@ -114,17 +97,12 @@ def upload_attachment(ticket_id, file_path):
         }
 
         response = requests.post(url, headers=headers, data=file_content)
-
-        # Debugging-Ausgabe
         print("Upload Status Code:", response.status_code)
         print("Upload Response Text:", response.text)
-
         response.raise_for_status()
 
-        # Den Token vom Upload abholen
         upload_token = response.json().get("upload", {}).get("token")
 
-        # Anhang dem Ticket hinzufügen
         issue_update_url = f"{redmine_url}/issues/{ticket_id}.json"
         issue_data = {
             "issue": {
@@ -139,11 +117,8 @@ def upload_attachment(ticket_id, file_path):
         }
         headers["Content-Type"] = "application/json"
         response = requests.put(issue_update_url, json=issue_data, headers=headers)
-
-        # Debugging-Ausgabe
         print("Attachment Update Status Code:", response.status_code)
         print("Attachment Update Response Text:", response.text)
-
         response.raise_for_status()
         return True
 
@@ -151,94 +126,74 @@ def upload_attachment(ticket_id, file_path):
         show_popup("Fehler", f"Fehler beim Hochladen des Anhangs: {e}")
         return False
 
-
-# Funktion zur Anzeige von Systeminformationen
 def get_inxi_info():
     try:
-        result = subprocess.run(
-            ["inxi", "-F", "-c", "0"], capture_output=True, text=True, check=True
-        )
+        result = subprocess.run(["inxi", "-F", "-c", "0"], capture_output=True, text=True, check=True)
         return result.stdout
     except subprocess.CalledProcessError:
         return "Fehler: 'inxi' konnte nicht ausgeführt werden."
 
-
-# Popup-Anzeige
 def show_popup(title, message):
     messagebox.showinfo(title, message)
 
 def create_screenshot():
-    # Screenshot erstellen
     subprocess.run(["gnome-screenshot", "--interactive"])
-
-# Funktion zur Auswahl einer Screenshot-Datei
 
 def screenshot_waehlen():
     file_paths = askopenfilenames(
-        initialdir='~',
+        initialdir=os.path.expanduser("~"),
         title="Wähle einen Screenshot aus",
-        filetypes=[
-            ("Alle Dateien", "*.*"),
-            ("Bilddateien", "*.png;*.jpg;*.jpeg;*.gif"),
-        ],
+        filetypes=[("Alle Dateien", "*.*"), ("Bilddateien", "*.png;*.jpg;*.jpeg;*.gif")],
     )
     if file_paths:
         screenshot_entry.delete(0, tk.END)
-        # Convert tuple to a comma-separated string
         file_path_str = ', '.join(file_paths)
         screenshot_entry.insert(0, file_path_str)
 
-
 def open_bug_page():
-    webbrowser.open(
-        "https://bugs.guideos.net/projects/guideos-bugtracking/issues?set_filter=1&tracker_id=1"
-    )
-
+    webbrowser.open("https://bugs.guideos.net/projects/guideos-bugtracking/issues?set_filter=1&tracker_id=1")
 
 def del_betreff(event):
     if betreff_entry.get() == "Gibt einen Titel ein:":
         betreff_entry.delete(0, tk.END)
 
-
 def del_beschreibung_text(event):
     if beschreibung_text.get("1.0", tk.END).strip() == "Schreibe einen Text:":
         beschreibung_text.delete("1.0", tk.END)
 
-
 def show_context_menu(event):
-    # Kontextmenü anzeigen
     context_menu.post(event.x_root, event.y_root)
 
-
 def paste_text():
-    # Text aus der Zwischenablage einfügen
     try:
         clipboard_text = root.clipboard_get()
         beschreibung_text.insert(tk.INSERT, clipboard_text)
     except tk.TclError:
-        pass  # Zwischenablage ist leer
+        pass
 
-
-# GUI erstellen
+# GUI
 root = tk.Tk()
 root.title("GuideOS Bug melden")
-# root.geometry= "500x600"
 home = os.path.expanduser("~")
 script_dir = os.path.dirname(os.path.abspath(__file__))
 application_path = os.path.dirname(script_dir)
-# Just simply import the azure.tcl file
-root.tk.call(
-    "source",
-    TCL_THEME_FILE_PATH,
-)  # replace with {application_path} in final.
 
-# Then set the theme you want with the set_theme procedure
+root.tk.call("source", TCL_THEME_FILE_PATH)
+
 if "dark" in theme_name or "Dark" in theme_name:
     root.tk.call("set_theme", "dark")
 else:
     root.tk.call("set_theme", "light")
 
+# Tracker-Typ Dropdown
+tracker_frame = ttk.LabelFrame(root, text="Art der Meldung", padding=20)
+tracker_frame.pack(fill="x", pady=5, padx=20)
 
+tracker_dropdown = ttk.Combobox(tracker_frame, values=["Bug", "Feature"], state="readonly")
+tracker_dropdown.pack(fill="x")
+tracker_dropdown.set("Bug")
+
+# Betreff
 titel_frame = ttk.LabelFrame(root, text="Betreff", padding=20)
 titel_frame.pack(fill="x", pady=5, padx=20)
 
@@ -247,47 +202,35 @@ betreff_entry.pack(pady=5, fill="x")
 betreff_entry.insert("end", "Gibt einen Titel ein:")
 betreff_entry.bind("<Button-1>", del_betreff)
 
-
+# Beschreibung
 issue_text_frame = ttk.LabelFrame(root, text="Fehlerbeschreibung", padding=20)
 issue_text_frame.pack(fill="x", pady=5, padx=20)
 
-
-beschreibung_text = tk.Text(
-    issue_text_frame, borderwidth=0, highlightthickness=1, height=15
-)
+beschreibung_text = tk.Text(issue_text_frame, borderwidth=0, highlightthickness=1, height=15)
 beschreibung_text.pack(pady=5, padx=5, fill="x", expand=True)
-
 beschreibung_text.insert("end", "Schreibe einen Text:")
 beschreibung_text.bind("<Button-1>", del_beschreibung_text)
 
 context_menu = tk.Menu(root, tearoff=0)
-
 context_menu.add_command(label="Einfügen", command=paste_text)
-
-# Kontextmenü bei Rechtsklick binden
 beschreibung_text.bind("<Button-3>", show_context_menu)
 
-
+# Screenshot-Bereich
 opt_frame = ttk.LabelFrame(root, text="Screenshot (optional)", padding=20)
 opt_frame.pack(fill="x", pady=5, padx=20)
-
 opt_frame.columnconfigure(0, weight=1)
 
-take_screenshot = ttk.Button(
-    opt_frame, text="Mach' einen Screenshot", command=create_screenshot
-)
-take_screenshot.grid(row=0, column=0,columnspan=3, padx=5,pady=10,sticky="ew")
+take_screenshot = ttk.Button(opt_frame, text="Mach' einen Screenshot", command=create_screenshot)
+take_screenshot.grid(row=0, column=0, columnspan=3, padx=5, pady=10, sticky="ew")
 
 screenshot_entry = ttk.Entry(opt_frame)
-screenshot_entry.grid(row=1, column=0,columnspan=2,padx=5, sticky="ew")
-screenshot_button = ttk.Button(
-    opt_frame, text="Durchsuchen", command=screenshot_waehlen
-)
-screenshot_button.grid(row=1, column=2, padx=5,sticky="e")
+screenshot_entry.grid(row=1, column=0, columnspan=2, padx=5, sticky="ew")
 
-submit_button = ttk.Button(
-    root, text="Ticket erstellen", command=ticket_erstellen, style="Accent.TButton"
-)
+screenshot_button = ttk.Button(opt_frame, text="Durchsuchen", command=screenshot_waehlen)
+screenshot_button.grid(row=1, column=2, padx=5, sticky="e")
+
+# Buttons
+submit_button = ttk.Button(root, text="Ticket erstellen", command=ticket_erstellen, style="Accent.TButton")
 submit_button.pack(pady=20, padx=20, fill="x")
 
 web_button = ttk.Button(root, text="Alle Meldungen einsehen", command=open_bug_page)
