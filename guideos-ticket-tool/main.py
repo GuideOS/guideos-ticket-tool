@@ -185,31 +185,42 @@ if "dark" in theme_name or "Dark" in theme_name:
 else:
     root.tk.call("set_theme", "light")
 
+root.columnconfigure(0, weight=1)
+
 # Tracker-Typ Dropdown
 tracker_frame = ttk.LabelFrame(root, text="Art der Meldung", padding=20)
-tracker_frame.pack(fill="x", pady=5, padx=20)
+tracker_frame.grid(row=0, column=0, pady=5, padx=20, sticky="ew")
+tracker_frame.columnconfigure(0, weight=1)
 
 tracker_dropdown = ttk.Combobox(tracker_frame, values=["Bug", "Feature"], state="readonly")
-tracker_dropdown.pack(fill="x")
+tracker_dropdown.grid(row=0, column=0, sticky="ew")
 tracker_dropdown.set("Bug")
 
 # Betreff
 titel_frame = ttk.LabelFrame(root, text="Betreff", padding=20)
-titel_frame.pack(fill="x", pady=5, padx=20)
+titel_frame.grid(row=1, column=0, pady=5, padx=20, sticky="ew")
+titel_frame.columnconfigure(0, weight=1)
 
 betreff_entry = ttk.Entry(titel_frame, width=50)
-betreff_entry.pack(pady=5, fill="x")
+betreff_entry.grid(row=0, column=0, pady=5, sticky="ew")
 betreff_entry.insert("end", "Gibt einen Titel ein:")
 betreff_entry.bind("<Button-1>", del_betreff)
 
 # Beschreibung
 issue_text_frame = ttk.LabelFrame(root, text="Fehlerbeschreibung", padding=20)
-issue_text_frame.pack(fill="x", pady=5, padx=20)
+issue_text_frame.grid(row=2, column=0, pady=5, padx=20, sticky="ew")
+issue_text_frame.columnconfigure(0, weight=1)
+issue_text_frame.rowconfigure(0, weight=1)
 
 beschreibung_text = tk.Text(issue_text_frame, borderwidth=0, highlightthickness=1, height=15)
-beschreibung_text.pack(pady=5, padx=5, fill="x", expand=True)
+beschreibung_text.grid(row=0, column=0, pady=5, padx=5, sticky="nsew")
 beschreibung_text.insert("end", "Schreibe einen Text:")
 beschreibung_text.bind("<Button-1>", del_beschreibung_text)
+
+# Scrollbar hinzufügen
+beschreibung_scrollbar = ttk.Scrollbar(issue_text_frame, orient="vertical", command=beschreibung_text.yview)
+beschreibung_scrollbar.grid(row=0, column=1, sticky="ns", pady=5)
+beschreibung_text.configure(yscrollcommand=beschreibung_scrollbar.set)
 
 context_menu = tk.Menu(root, tearoff=0)
 context_menu.add_command(label="Einfügen", command=paste_text)
@@ -217,8 +228,10 @@ beschreibung_text.bind("<Button-3>", show_context_menu)
 
 # Screenshot-Bereich
 opt_frame = ttk.LabelFrame(root, text="Screenshot (optional)", padding=20)
-opt_frame.pack(fill="x", pady=5, padx=20)
+opt_frame.grid(row=3, column=0, pady=5, padx=20, sticky="ew")
 opt_frame.columnconfigure(0, weight=1)
+opt_frame.columnconfigure(1, weight=1)
+opt_frame.columnconfigure(2, weight=0)
 
 take_screenshot = ttk.Button(opt_frame, text="Mach' einen Screenshot", command=create_screenshot)
 take_screenshot.grid(row=0, column=0, columnspan=3, padx=5, pady=10, sticky="ew")
@@ -231,9 +244,9 @@ screenshot_button.grid(row=1, column=2, padx=5, sticky="e")
 
 # Buttons
 submit_button = ttk.Button(root, text="Ticket erstellen", command=ticket_erstellen, style="Accent.TButton")
-submit_button.pack(pady=20, padx=20, fill="x")
+submit_button.grid(row=4, column=0, pady=20, padx=20, sticky="ew")
 
 web_button = ttk.Button(root, text="Alle Meldungen einsehen", command=open_bug_page)
-web_button.pack(pady=20, padx=20, fill="x")
+web_button.grid(row=5, column=0, pady=20, padx=20, sticky="ew")
 
 root.mainloop()
