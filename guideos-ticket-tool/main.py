@@ -212,7 +212,7 @@ issue_text_frame.grid(row=2, column=0, pady=5, padx=20, sticky="ew")
 issue_text_frame.columnconfigure(0, weight=1)
 issue_text_frame.rowconfigure(0, weight=1)
 
-beschreibung_text = tk.Text(issue_text_frame, borderwidth=0, highlightthickness=1, height=15)
+beschreibung_text = tk.Text(issue_text_frame, borderwidth=0, highlightthickness=1, height=5)
 beschreibung_text.grid(row=0, column=0, pady=5, padx=5, sticky="nsew")
 beschreibung_text.insert("end", "Schreibe einen Text:")
 beschreibung_text.bind("<Button-1>", del_beschreibung_text)
