@@ -1,3 +1,9 @@
+guideos-ticket-tool (0.1.1) unstable; urgency=medium
+
+  * GUI Fix
+
+ -- Actionschnitzel <actionschnitzel@guideos.de>  Mon, 02 Jun 2025 09:50:53 +0200
+
 guideos-ticket-tool (0.1.0) unstable; urgency=medium
 
   * Changed Icons
