@@ -10,7 +10,7 @@ from azure_ttk import *
 from tkfilebrowser import askopendirname, askopenfilenames, asksaveasfilename
 
 # API-Token
-api_token = "17d83a8b8e64ab63843068e7609b9a55755035d7"
+api_token = "a9e870e08e1221a5c09c63dec86fae2e65e493ca"
 
 if not api_token:
     raise ValueError("API-Token nicht gefunden. Bitte stelle sicher, dass der Token gesetzt ist.")
