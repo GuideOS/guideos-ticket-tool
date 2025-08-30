@@ -19,7 +19,7 @@ override_dh_install:
 	# Kopieren der Dateien
 	cp guideos-ticket-tool-logo.png debian/$(PACKAGE)/usr/share/icons/hicolor/256x256/apps/guideos-ticket-tool-logo.png
 	cp guideos-ticket-tool-logo.svg debian/$(PACKAGE)/usr/share/icons/hicolor/scalable/apps/guideos-ticket-tool-logo.svg
-	cp io.github.actionschnitzel.guideos-ticket-tool.appdata.xml debian/$(PACKAGE)/usr/share/metainfo/io.github.actionschnitzel.guideos-ticket-tool.appdata.xml
+	cp io.github.guideos.guideos_ticket_tool.metainfo.xml debian/$(PACKAGE)/usr/share/metainfo/io.github.guideos.guideos_ticket_tool.metainfo.xml
 	cp LICENSE debian/$(PACKAGE)/usr/share/doc/$(PACKAGE)/LICENSE
 
 	# Kopieren der notwendigen Dateien

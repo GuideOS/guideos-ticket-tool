@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.guideos.guideos_ticket_tool</id>
+  
+  <name>GuideOS Ticket Tool</name>
+  <summary>App to submit Bugs</summary>
+  
+  <metadata_license>MIT</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  
+  <description>
+    <p>
+      Bug report tool for Linux Guide OS.A simple GUI tool to report bugs in Guide OS to our issue tracker. Including screenshots.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">guideos-ticket-tool.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/GuideOS/guideos-ticket-tool/blob/main/screenshot.png?raw=true</image>
+    </screenshot>
+  </screenshots>
+</component>
