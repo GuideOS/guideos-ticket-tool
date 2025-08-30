@@ -1,3 +1,9 @@
+guideos-ticket-tool (1.0) unstable; urgency=medium
+
+  * GTK3 Rewrite
+
+ -- Actionschnitzel <actionschnitzel@guideos.de>  Fri, 29 Aug 2025 20:58:20 -0400
+
 guideos-ticket-tool (0.1.1) unstable; urgency=medium
 
   * GUI Fix
