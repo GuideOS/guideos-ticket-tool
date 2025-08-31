@@ -7,15 +7,16 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 import webbrowser
+import mimetypes
 
 
 # API-Token
-api_token = "991c757492f78675cbbe6d887e63051e058fe40a"
+api_token = "32be6c4aae4b48abbcf277f632d762a81fc5aef1"
 
 if not api_token:
     raise ValueError("API-Token nicht gefunden. Bitte stelle sicher, dass der Token gesetzt ist.")
 
-redmine_url = "https://bugs.guideos.net"
+redmine_url = "https://redmine.guideos.net"
 project_identifier = "guideos"
 
 class TicketToolWindow(Gtk.Window):
@@ -158,13 +159,21 @@ class TicketToolWindow(Gtk.Window):
             response = requests.post(url, headers=headers, data=file_content)
             response.raise_for_status()
             upload_token = response.json().get("upload", {}).get("token")
+
+            # Content-Type anhand der Dateiendung bestimmen
+            mime_type, _ = mimetypes.guess_type(file_path)
+            if not mime_type:
+                mime_type = "application/octet-stream"
+
             issue_update_url = f"{redmine_url}/issues/{ticket_id}.json"
             issue_data = {
                 "issue": {
+                    "notes": "Screenshot hinzugefügt",
                     "uploads": [
                         {
                             "token": upload_token,
                             "filename": os.path.basename(file_path),
+                            "content_type": mime_type,
                             "description": "Screenshot oder Anhang",
                         }
                     ]
