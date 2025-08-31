@@ -231,7 +231,7 @@ class TicketToolWindow(Gtk.Window):
         dialog.destroy()
 
     def open_bug_page(self, widget):
-        webbrowser.open("https://bugs.guideos.net/projects/guideos-bugtracking/issues?set_filter=1&tracker_id=1")
+        webbrowser.open("https://redmine.guideos.net/projects/guideos/issues")
 
 win = TicketToolWindow()
 win.connect("destroy", Gtk.main_quit)

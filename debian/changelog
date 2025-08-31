@@ -1,3 +1,12 @@
+guideos-ticket-tool (1.1.1) unstable; urgency=medium
+
+  * Added Gtk.Entry placeholder for subject field
+  * Added overlay with dynamic placeholder for description TextView
+  * Placeholders are not submitted as text and disappear on user input
+  * Fixed redmine connectivity
+
+ -- Actionschnitzel <actionschnitzel@guideos.de>  Sun, 31 Aug 2025 08:18:11 -0400
+
 guideos-ticket-tool (1.0) unstable; urgency=medium
 
   * GTK3 Rewrite
