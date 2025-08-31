@@ -40,21 +40,35 @@ class TicketToolWindow(Gtk.Window):
         self.tracker_dropdown.set_active(0)
         tracker_box.pack_start(self.tracker_dropdown, True, True, 0)
 
-        # Betreff
+        # Betreff (mit Placeholder)
         betreff_label = Gtk.Label(label="Betreff:")
         vbox.pack_start(betreff_label, False, False, 0)
         self.betreff_entry = Gtk.Entry()
-        self.betreff_entry.set_text("Gibt einen Titel ein:")
+        self.betreff_entry.set_placeholder_text("Gib einen Titel ein")
         vbox.pack_start(self.betreff_entry, False, False, 0)
 
-        # Beschreibung
+        # Beschreibung (mit Placeholder-Overlay)
         beschreibung_label = Gtk.Label(label="Fehlerbeschreibung:")
         vbox.pack_start(beschreibung_label, False, False, 0)
+
+        beschreibung_overlay = Gtk.Overlay()
         self.beschreibung_text = Gtk.TextView()
-        self.beschreibung_text.get_buffer().set_text("Schreibe einen Text:")
+        beschreibung_overlay.add(self.beschreibung_text)
+
+        self.beschreibung_placeholder = Gtk.Label(label="Schreibe einen Text ...")
+        self.beschreibung_placeholder.set_halign(Gtk.Align.START)
+        self.beschreibung_placeholder.set_valign(Gtk.Align.START)
+        self.beschreibung_placeholder.set_margin_start(4)
+        self.beschreibung_placeholder.set_margin_top(4)
+        self.beschreibung_placeholder.get_style_context().add_class("dim-label")  # grau
+        beschreibung_overlay.add_overlay(self.beschreibung_placeholder)
+
+        buffer = self.beschreibung_text.get_buffer()
+        buffer.connect("changed", self.toggle_placeholder)
+
         beschreibung_scroll = Gtk.ScrolledWindow()
         beschreibung_scroll.set_vexpand(True)
-        beschreibung_scroll.add(self.beschreibung_text)
+        beschreibung_scroll.add(beschreibung_overlay)
         vbox.pack_start(beschreibung_scroll, True, True, 0)
 
         # Screenshot
@@ -79,6 +93,14 @@ class TicketToolWindow(Gtk.Window):
         web_button.connect("clicked", self.open_bug_page)
         vbox.pack_start(web_button, False, False, 0)
 
+    def toggle_placeholder(self, buffer):
+        start, end = buffer.get_bounds()
+        text = buffer.get_text(start, end, True)
+        if text.strip():
+            self.beschreibung_placeholder.hide()
+        else:
+            self.beschreibung_placeholder.show()
+
     def show_popup(self, title, message):
         dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.INFO, buttons=Gtk.ButtonsType.OK, text=title)
         dialog.format_secondary_text(message)
@@ -101,10 +123,7 @@ class TicketToolWindow(Gtk.Window):
         ticket_typ = self.tracker_dropdown.get_active_text()
         tracker_id = 1 if ticket_typ == "Bug" else 2
 
-        if betreff.strip() == "Gibt einen Titel ein:" or beschreibung.strip() == "Schreibe einen Text:":
-            self.show_popup("Fehler", "Betreff und Beschreibung dürfen nicht leer sein.")
-            return
-        elif not betreff.strip() or not beschreibung.strip():
+        if not betreff.strip() or not beschreibung.strip():
             self.show_popup("Fehler", "Betreff und Beschreibung dürfen nicht leer sein.")
             return
 
@@ -135,9 +154,10 @@ class TicketToolWindow(Gtk.Window):
                     if upload_response:
                         success_message += f"\nAnhang {screenshot_path} erfolgreich hinzugefügt."
                 self.show_popup("Erfolg", success_message)
-                self.betreff_entry.set_text("Gibt einen Titel ein:")
-                buf.set_text("Schreibe einen Text:")
+                self.betreff_entry.set_text("")
+                buf.set_text("")
                 self.screenshot_entry.set_text("")
+                self.beschreibung_placeholder.show()
                 return True
             else:
                 self.show_popup("Fehler", f"Fehler beim Erstellen des Tickets. Statuscode: {response.status_code}")
@@ -160,7 +180,6 @@ class TicketToolWindow(Gtk.Window):
             response.raise_for_status()
             upload_token = response.json().get("upload", {}).get("token")
 
-            # Content-Type anhand der Dateiendung bestimmen
             mime_type, _ = mimetypes.guess_type(file_path)
             if not mime_type:
                 mime_type = "application/octet-stream"
