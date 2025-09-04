@@ -8,6 +8,6 @@ Homepage: https://guideos.de
 
 Package: guideos-ticket-tool
 Architecture: all
-Depends: ${misc:Depends}, python3-gi, gir1.2-gtk-3.0, python3-requests, python3-pil
+Depends: ${misc:Depends}, python3-gi, gir1.2-gtk-3.0, python3-requests, python3-pil, python3-dotenv
 Description: Bug report tool for Linux Guide OS
   A simple GUI tool to report bugs in Guide OS to our issue tracker.
