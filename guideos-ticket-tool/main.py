@@ -8,10 +8,13 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 import webbrowser
 import mimetypes
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 # API-Token
-api_token = "32be6c4aae4b48abbcf277f632d762a81fc5aef1"
+api_token = os.getenv('REDMINE_API_TOKEN')
 
 if not api_token:
     raise ValueError("API-Token nicht gefunden. Bitte stelle sicher, dass der Token gesetzt ist.")
