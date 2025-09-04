@@ -13,14 +13,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# API-Token
+# API-Token und Redmine-URL aus Umgebungsvariablen
 api_token = os.getenv('REDMINE_API_TOKEN')
+redmine_url = os.getenv('REDMINE_URL')
+project_identifier = "guideos"
 
 if not api_token:
-    raise ValueError("API-Token nicht gefunden. Bitte stelle sicher, dass der Token gesetzt ist.")
-
-redmine_url = "https://redmine.guideos.net"
-project_identifier = "guideos"
+    raise ValueError("API-Token nicht gefunden. Bitte stelle sicher, dass der Token in der .env gesetzt ist.")
+if not redmine_url:
+    raise ValueError("Redmine-URL nicht gefunden. Bitte stelle sicher, dass REDMINE_URL in der .env gesetzt ist.")
 
 class TicketToolWindow(Gtk.Window):
     def __init__(self):
