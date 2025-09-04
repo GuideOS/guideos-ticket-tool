@@ -8,16 +8,20 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 import webbrowser
 import mimetypes
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
-# API-Token
-api_token = "32be6c4aae4b48abbcf277f632d762a81fc5aef1"
+# API-Token und Redmine-URL aus Umgebungsvariablen
+api_token = os.getenv('REDMINE_API_TOKEN')
+redmine_url = os.getenv('REDMINE_URL')
+project_identifier = "guideos"
 
 if not api_token:
-    raise ValueError("API-Token nicht gefunden. Bitte stelle sicher, dass der Token gesetzt ist.")
-
-redmine_url = "https://redmine.guideos.net"
-project_identifier = "guideos"
+    raise ValueError("API-Token nicht gefunden. Bitte stelle sicher, dass der Token in der .env gesetzt ist.")
+if not redmine_url:
+    raise ValueError("Redmine-URL nicht gefunden. Bitte stelle sicher, dass REDMINE_URL in der .env gesetzt ist.")
 
 class TicketToolWindow(Gtk.Window):
     def __init__(self):
