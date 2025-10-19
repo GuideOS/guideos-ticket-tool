@@ -1,3 +1,11 @@
+guideos-ticket-tool (1.1.2) unstable; urgency=medium
+
+  * Added text wrapping for description TextView
+  * Improved text input experience with automatic line breaks
+  * Added margins to description text area for better readability
+
+ -- Actionschnitzel <actionschnitzel@guideos.de>  Sat, 19 Oct 2025 12:00:00 +0100
+
 guideos-ticket-tool (1.1.1) unstable; urgency=medium
 
   * Added Gtk.Entry placeholder for subject field

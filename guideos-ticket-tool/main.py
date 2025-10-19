@@ -11,12 +11,12 @@ import mimetypes
 
 
 # API-Token
-api_token = "32be6c4aae4b48abbcf277f632d762a81fc5aef1"
+api_token = ""
 
 if not api_token:
     raise ValueError("API-Token nicht gefunden. Bitte stelle sicher, dass der Token gesetzt ist.")
 
-redmine_url = "https://redmine.guideos.net"
+redmine_url = ""
 project_identifier = "guideos"
 
 class TicketToolWindow(Gtk.Window):
@@ -53,6 +53,9 @@ class TicketToolWindow(Gtk.Window):
 
         beschreibung_overlay = Gtk.Overlay()
         self.beschreibung_text = Gtk.TextView()
+        self.beschreibung_text.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
+        self.beschreibung_text.set_left_margin(5)
+        self.beschreibung_text.set_right_margin(5)
         beschreibung_overlay.add(self.beschreibung_text)
 
         self.beschreibung_placeholder = Gtk.Label(label="Schreibe einen Text ...")
