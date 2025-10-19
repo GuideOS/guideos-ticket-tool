@@ -40,8 +40,14 @@ class TicketToolWindow(Gtk.Window):
         self.tracker_dropdown.set_active(0)
         tracker_box.pack_start(self.tracker_dropdown, True, True, 0)
 
+        # Systemdaten Checkbox
+        self.systemdaten_checkbox = Gtk.CheckButton(label="Systemdaten senden (Optional)")
+        self.systemdaten_checkbox.set_active(True)  # Standardmäßig aktiviert
+        vbox.pack_start(self.systemdaten_checkbox, False, False, 0)
+
         # Betreff (mit Placeholder)
         betreff_label = Gtk.Label(label="Betreff:")
+        betreff_label.set_halign(Gtk.Align.START)
         vbox.pack_start(betreff_label, False, False, 0)
         self.betreff_entry = Gtk.Entry()
         self.betreff_entry.set_placeholder_text("Gib einen Titel ein")
@@ -49,6 +55,7 @@ class TicketToolWindow(Gtk.Window):
 
         # Beschreibung (mit Placeholder-Overlay)
         beschreibung_label = Gtk.Label(label="Fehlerbeschreibung:")
+        beschreibung_label.set_halign(Gtk.Align.START)
         vbox.pack_start(beschreibung_label, False, False, 0)
 
         beschreibung_overlay = Gtk.Overlay()
@@ -76,6 +83,7 @@ class TicketToolWindow(Gtk.Window):
 
         # Screenshot
         screenshot_label = Gtk.Label(label="Screenshot (optional):")
+        screenshot_label.set_halign(Gtk.Align.START)
         vbox.pack_start(screenshot_label, False, False, 0)
         screenshot_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         vbox.pack_start(screenshot_box, False, False, 0)
@@ -130,8 +138,12 @@ class TicketToolWindow(Gtk.Window):
             self.show_popup("Fehler", "Betreff und Beschreibung dürfen nicht leer sein.")
             return
 
-        system_info = self.get_inxi_info()
-        full_description = f"{beschreibung}\n\nSysteminformationen:\n{system_info}"
+        # Systemdaten nur hinzufügen, wenn Checkbox aktiviert ist
+        if self.systemdaten_checkbox.get_active():
+            system_info = self.get_inxi_info()
+            full_description = f"{beschreibung}\n\nSysteminformationen:\n{system_info}"
+        else:
+            full_description = beschreibung
 
         headers = {
             "X-Redmine-API-Key": api_token,
