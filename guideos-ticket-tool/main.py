@@ -26,6 +26,9 @@ class TicketToolWindow(Gtk.Window):
         self.set_default_size(500, 600)
         self.set_icon_name("guideos-ticket-tool-logo")
 
+        # Popup beim Start anzeigen
+        self.show_startup_popup()
+
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         self.add(vbox)
 
@@ -247,6 +250,26 @@ class TicketToolWindow(Gtk.Window):
 
     def open_bug_page(self, widget):
         webbrowser.open("https://redmine.guideos.net/projects/guideos/issues")
+
+    def show_startup_popup(self):
+        message = (
+            "Bevor du einen Bug oder ein Feature meldest, "
+            "schau bitte nach, ob es zu deinem Thema bereits eine Meldung gibt. "
+            "Doppelte Meldungen werden vom Dev-Team in der Regel ignoriert."
+            "\n\nBitte melde nur Bugs, die du auch nachvollziehen kannst und gib so viele Details wie möglich an."
+            "\n\nBitte verfasse auch für jedes Thema einen eigenen Report."
+
+        )
+        dialog = Gtk.MessageDialog(
+            parent=self,
+            flags=0,
+            message_type=Gtk.MessageType.INFO,
+            buttons=Gtk.ButtonsType.OK,
+            text="Wichtiger Hinweis",
+        )
+        dialog.format_secondary_text(message)
+        dialog.run()
+        dialog.destroy()
 
 win = TicketToolWindow()
 win.connect("destroy", Gtk.main_quit)
