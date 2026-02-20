@@ -1,3 +1,20 @@
+guideos-ticket-tool (1.3.0) unstable; urgency=medium
+
+  * Migrated from GTK 4 to libadwaita
+  * Modernized UI with Adw.PreferencesGroup and Adw.ActionRow
+  * Added responsive layout with Adw.Clamp
+  * Improved design with modern libadwaita header bar
+  * Reordered options: Forum first, GitHub second
+  * Fixed window centering with non-resizable window
+
+ -- Actionschnitzel <actionschnitzel@guideos.de>  Thu, 20 Feb 2026 14:00:00 +0100
+
+guideos-ticket-tool (1.2.0) unstable; urgency=medium
+
+  * Transition to Helpdesk
+
+ -- Actionschnitzel <actionschnitzel@guideos.de>  Fri, 16 Jan 2026 12:26:27 +0100
+
 guideos-ticket-tool (1.1.3) unstable; urgency=medium
 
   * Added text wrapping for description TextView
